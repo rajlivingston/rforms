@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Welcome to RForms</h1>
+    <p class="page-subtitle">Create, manage, and share forms with ease</p>
+</div>
+
+<!-- Hero Section -->
+<div class="card mb-4">
+    <div class="card-body p-4">
+        <div class="flex-between">
+            <div>
+                <h2 style="margin: 0; color: var(--text-dark); font-size: 1.75rem;">Build Smart Forms in Minutes</h2>
+                <p style="color: var(--text-light); margin-top: 0.5rem;">RForms is a powerful form builder that lets you create professional forms without coding.</p>
+            </div>
+            <div>
+                <a href="/forms/create/" class="btn btn-primary btn-lg">
+                    ✨ Create New Form
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="grid grid-3 mb-4">
+    <div class="card">
+        <div class="card-body text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin: 0;">0</h3>
+            <p class="card-text">Total Forms</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <h3 style="font-size: 2rem; color: var(--success-color); margin: 0;">0</h3>
+            <p class="card-text">Responses</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <h3 style="font-size: 2rem; color: var(--secondary-color); margin: 0;">0</h3>
+            <p class="card-text">Shared Forms</p>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="mb-4">
+    <h2 style="margin-bottom: 1.5rem;">Key Features</h2>
+    <div class="grid grid-3">
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">📝 Easy to Create</h3>
+                <p class="card-text">Drag and drop form builder with pre-built fields and templates.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">🔗 Share & Collaborate</h3>
+                <p class="card-text">Share forms with team members and collaborate in real-time.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">📊 Analytics</h3>
+                <p class="card-text">Track responses and get insights with built-in analytics.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">🔒 Secure</h3>
+                <p class="card-text">Enterprise-grade security to protect your data and forms.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">📱 Responsive</h3>
+                <p class="card-text">Forms work perfectly on desktop, tablet, and mobile devices.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">⚡ Fast</h3>
+                <p class="card-text">Lightning-fast form loading and processing.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="card" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+    <div class="card-body p-4 text-center">
+        <h2 style="color: white; margin-bottom: 1rem;">Ready to Get Started?</h2>
+        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 1.5rem;">Create your first form in seconds and start collecting responses</p>
+        <a href="/forms/create/" class="btn btn-outline" style="color: white; border-color: white;">
+            Start Building Now →
+        </a>
+    </div>
+</div>
+
+{% endblock %}

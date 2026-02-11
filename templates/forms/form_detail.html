@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-header">
+    <a href="/forms/" style="color: var(--primary-color); text-decoration: none; margin-bottom: 1rem;">← Back to Forms</a>
+    <div class="flex-between">
+        <div>
+            <h1 class="page-title" id="form-title-display">Form Title</h1>
+            <p class="page-subtitle" id="form-desc-display">Form description goes here</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="goToEdit()">✏️ Edit</button>
+            <button class="btn btn-secondary" onclick="shareForm()">🔗 Share</button>
+            <button class="btn btn-outline" onclick="viewResponses()">📊 Responses</button>
+        </div>
+    </div>
+</div>
+
+<!-- Form Statistics -->
+<div class="grid grid-3 mb-4">
+    <div class="card">
+        <div class="card-body text-center">
+            <h3 style="font-size: 2rem; color: var(--primary-color); margin: 0;" id="responses-count">0</h3>
+            <p class="card-text">Total Responses</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <h3 style="font-size: 2rem; color: var(--success-color); margin: 0;">100%</h3>
+            <p class="card-text">Completion Rate</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body text-center">
+            <h3 style="font-size: 2rem; color: var(--info-color); margin: 0;" id="fields-count">0</h3>
+            <p class="card-text">Total Fields</p>
+        </div>
+    </div>
+</div>
+
+<!-- Form Display -->
+<div class="card">
+    <div class="card-body p-4">
+        <form id="view-form">
+            <div id="form-fields-display">
+                <!-- Fields will be populated here -->
+            </div>
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">Submit Response</button>
+                <button type="reset" class="btn btn-outline">Clear</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Tabs for different views -->
+<div style="margin-top: 2rem;">
+    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-color);">
+        <button class="tab-btn active" onclick="switchView('responses')" style="padding: 1rem; border: none; background: none; cursor: pointer; color: var(--primary-color); border-bottom: 2px solid var(--primary-color); font-weight: 500;">
+            Responses
+        </button>
+        <button class="tab-btn" onclick="switchView('analytics')" style="padding: 1rem; border: none; background: none; cursor: pointer; color: var(--text-light);">
+            Analytics
+        </button>
+    </div>
+
+    <!-- Responses View -->
+    <div id="responses-view">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Form Responses</h2>
+            </div>
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Submitted</th>
+                            <th>Response</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-light);">
+                                No responses yet. Share your form to start collecting data.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics View -->
+    <div id="analytics-view" style="display: none;">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Form Analytics</h2>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-2">
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Response Timeline</h3>
+                        <div style="height: 300px; background: #f9fafb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; color: var(--text-light);">
+                            Chart would display here
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Field Performance</h3>
+                        <div style="height: 300px; background: #f9fafb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; color: var(--text-light);">
+                            Chart would display here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div id="share-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Share Form</h2>
+            <button class="modal-close" onclick="closeShareModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <h3 style="margin-bottom: 1rem;">Share Link</h3>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="share-link" 
+                    value="https://rforms.app/share/abc123"
+                    readonly
+                >
+                <button class="btn btn-primary" onclick="copyToClipboard()">Copy</button>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Share with Users</h3>
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Enter email address" id="share-email">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="shareWithUser()">Send Invite</button>
+
+            <h3 style="margin: 1.5rem 0 1rem 0;">Shared Users</h3>
+            <div style="border: 1px solid var(--border-color); border-radius: 0.375rem; padding: 1rem;">
+                <p style="color: var(--text-light); margin: 0;">No users yet</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function shareForm() {
+    document.getElementById('share-modal').classList.add('active');
+}
+
+function closeShareModal() {
+    document.getElementById('share-modal').classList.remove('active');
+}
+
+function copyToClipboard() {
+    const link = document.getElementById('share-link');
+    link.select();
+    document.execCommand('copy');
+    alert('Link copied to clipboard!');
+}
+
+function shareWithUser() {
+    const email = document.getElementById('share-email').value;
+    if (email) {
+        alert('Invitation sent to ' + email);
+        document.getElementById('share-email').value = '';
+    }
+}
+
+function switchView(view) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.style.color = 'var(--text-light)';
+        btn.style.borderBottom = 'none';
+    });
+    event.target.style.color = 'var(--primary-color)';
+    event.target.style.borderBottom = '2px solid var(--primary-color)';
+
+    document.getElementById('responses-view').style.display = view === 'responses' ? 'block' : 'none';
+    document.getElementById('analytics-view').style.display = view === 'analytics' ? 'block' : 'none';
+}
+
+function goToEdit() {
+    window.location.href = '/forms/edit/1/';
+}
+
+function viewResponses() {
+    document.getElementById('responses-view').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+{% endblock %}

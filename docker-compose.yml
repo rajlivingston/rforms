@@ -1,0 +1,50 @@
+
+services:
+  django:
+    build: .
+    container_name: django-app
+    restart: always
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgresql
+      - redis
+    environment:
+      DB_ENGINE: django.db.backends.postgresql
+      DB_HOST: postgresql
+      DB_NAME: rforms_db
+      DB_USER: postgres
+      DB_PASSWORD: Livi@2003
+      DB_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  postgresql:
+    image: postgres:16
+    container_name: django-postgresql
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Livi@2003
+      POSTGRES_DB: forms_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+
+  redis:
+    image: redis:latest
+    container_name: django-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgresql_data:
+  redis_data:

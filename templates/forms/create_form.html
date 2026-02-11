@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-header">
+    <a href="/forms/" style="color: var(--primary-color); text-decoration: none; margin-bottom: 1rem;">← Back to Forms</a>
+    <h1 class="page-title">Create New Form</h1>
+    <p class="page-subtitle">Build a custom form with drag-and-drop ease</p>
+</div>
+
+<div class="grid" style="grid-template-columns: 1fr 350px; gap: 2rem;">
+    <!-- Main Form Builder -->
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Basic Information</h2>
+            </div>
+            <div class="card-body">
+                <form id="form-builder">
+                    <div class="form-group">
+                        <label class="form-label">Form Title *</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="form-title" 
+                            placeholder="e.g. Customer Feedback Survey"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Form Description</label>
+                        <textarea 
+                            class="form-control" 
+                            id="form-description" 
+                            placeholder="Describe what this form is about..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input 
+                                type="checkbox" 
+                                class="form-check-input" 
+                                id="form-active"
+                                checked
+                            >
+                            <label class="form-check-label" for="form-active">
+                                Active (Accept responses)
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Form Fields -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <div class="flex-between">
+                    <h2 class="card-title">Form Fields</h2>
+                    <button class="btn btn-sm btn-primary" onclick="openFieldModal()">
+                        ➕ Add Field
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="fields-container">
+                    <div class="text-center" style="padding: 2rem; color: var(--text-light);">
+                        <p>No fields added yet. Click "Add Field" to get started.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+        <!-- Quick Add Fields -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title" style="font-size: 1rem;">Field Types</h3>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                <div style="display: flex; flex-direction: column;">
+                    <button class="field-preset" onclick="addField('text')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background-color 0.3s;">
+                        <div style="font-weight: 500; color: var(--text-dark);">📝 Short Text</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Single-line input</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('textarea')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">📄 Long Text</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Multi-line input</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('email')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">📧 Email</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Email input</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('number')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">🔢 Number</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Numeric input</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('select')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">⬇️ Dropdown</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Multiple options</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('checkbox')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">☑️ Checkbox</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Multiple selections</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('radio')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">⭕ Radio Button</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Single selection</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('date')" style="padding: 1rem; border: none; background: none; text-align: left; border-bottom: 1px solid var(--border-color); cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">📅 Date</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">Date picker</div>
+                    </button>
+                    <button class="field-preset" onclick="addField('file')" style="padding: 1rem; border: none; background: none; text-align: left; cursor: pointer;">
+                        <div style="font-weight: 500; color: var(--text-dark);">📎 File Upload</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">File attachment</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title" style="font-size: 1rem;">Actions</h3>
+            </div>
+            <div class="card-body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn btn-primary" style="width: 100%;" onclick="saveForm()">
+                    💾 Save Form
+                </button>
+                <button class="btn btn-outline" style="width: 100%;" onclick="previewForm()">
+                    👁️ Preview
+                </button>
+                <button class="btn btn-danger" style="width: 100%;" onclick="resetForm()">
+                    🔄 Reset
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Field Modal -->
+<div id="field-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Add Form Field</h2>
+            <button class="modal-close" onclick="closeFieldModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <form id="field-form">
+                <div class="form-group">
+                    <label class="form-label">Field Label *</label>
+                    <input type="text" class="form-control" id="field-label" placeholder="e.g. Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Field Type</label>
+                    <select class="form-control" id="field-type">
+                        <option value="text">Short Text</option>
+                        <option value="textarea">Long Text</option>
+                        <option value="email">Email</option>
+                        <option value="number">Number</option>
+                        <option value="select">Dropdown</option>
+                        <option value="checkbox">Checkbox</option>
+                        <option value="radio">Radio Button</option>
+                        <option value="date">Date</option>
+                        <option value="file">File Upload</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Help Text</label>
+                    <input type="text" class="form-control" id="field-help" placeholder="Optional hint for users">
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="field-required" checked>
+                        <label class="form-check-label" for="field-required">
+                            Required Field
+                        </label>
+                    </div>
+                </div>
+                <div id="options-group" class="form-group hidden">
+                    <label class="form-label">Options (one per line)</label>
+                    <textarea class="form-control" id="field-options" placeholder="Option 1&#10;Option 2&#10;Option 3"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeFieldModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="addFieldFromModal()">Add Field</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/form-builder.js' %}"></script>
+
+{% endblock %}
